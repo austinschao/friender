@@ -30,28 +30,24 @@ function FrienderApp() {
           FrienderAPI.token = token;
           const username = jwtDecode(token).username;
           const userInfo = await FrienderAPI.getUser(username);
-          // want an array of job objects. we have array of job ids
-          const jobPromises = userInfo.applications.map((id) =>
-            FrienderAPI.getJob(id)
-          );
-          const jobs = await Promise.all(jobPromises);
-          setUser({
-            ...userInfo,
-            applications: new Set(userInfo.applications),
-            jobs,
+
+          setCurrentUser({
+            ...userInfo
           });
         }
-        setLoaded(true);
+        setIsLoading(false);
       }
       getUser();
     },
     [token]
   );
 
-  return (
+  return isLoading ? (<p>Loading . . .</p>) : (
     <>
-      <NavBar />
-      <h1>Main App</h1>
+      <BrowserRouter>
+        <NavBar />
+      </BrowserRouter>
+
       <UpdateProfileForm />
     </>
   );
