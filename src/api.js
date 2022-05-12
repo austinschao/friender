@@ -29,6 +29,19 @@ class FrienderAPI {
 
   // Individual API routes
 
+  /** Sign up a user, returns token */
+  static async signup(formData) {
+    let res = await this.request("/signup", formData, "post");
+    console.log("token", res.token);
+    return res.token;
+  }
+
+  /** Log in a user, return token */
+  static async login(formData) {
+    let res = await this.request("/login", formData, "post");
+    return res.token;
+  }
+
   /** Get details on a user */
 
   static async getUser(username) {

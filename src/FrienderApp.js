@@ -8,7 +8,7 @@ import jwtDecode from "jwt-decode";
 import NavBar from "./NavBar";
 import RoutesList from "./RoutesList";
 
-const TOKEN = "token";
+const TOKEN_NAME = "token";
 
 /**
  *
@@ -21,7 +21,7 @@ const TOKEN = "token";
 function FrienderApp() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [token, setToken] = useState(localStorage.getItem(TOKEN));
+  const [token, setToken] = useState(localStorage.getItem(TOKEN_NAME));
 
   useEffect(
     function getUserOnMount() {
@@ -41,6 +41,14 @@ function FrienderApp() {
     },
     [token]
   );
+
+  /** Make API call to sign up user */
+
+  async function handleSignup(formData) {
+    const newUserToken = await FrienderAPI.signup(formData);
+    setToken(newUserToken);
+    localStorage.setItem(TOKEN_NAME, newUserToken);
+  }
 
   return isLoading ? (
     <p>Loading . . .</p>
