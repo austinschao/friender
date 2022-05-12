@@ -1,10 +1,9 @@
-import FrienderApp from './FrienderApp';
-import './App.css';
+import FrienderApp from "./FrienderApp";
 
 function App() {
   return (
     <div className="App">
-      <FrienderApp/>
+      <FrienderApp />
     </div>
   );
 }
