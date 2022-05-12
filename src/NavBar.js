@@ -29,7 +29,7 @@ function NavBar({ logout }) {
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/users/:username/matches">
+        <Link className="nav-link" to="/users/:username/friends">
           Friends
         </Link>
       </li>

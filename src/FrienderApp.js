@@ -6,7 +6,7 @@ import UserContext from "./userContext";
 import FrienderAPI from "./api";
 import jwtDecode from "jwt-decode";
 import NavBar from "./NavBar";
-
+import RoutesList from "./RoutesList";
 
 const TOKEN = "token";
 
@@ -32,7 +32,7 @@ function FrienderApp() {
           const userInfo = await FrienderAPI.getUser(username);
 
           setCurrentUser({
-            ...userInfo
+            ...userInfo,
           });
         }
         setIsLoading(false);
@@ -42,10 +42,19 @@ function FrienderApp() {
     [token]
   );
 
-  return isLoading ? (<p>Loading . . .</p>) : (
+  return isLoading ? (
+    <p>Loading . . .</p>
+  ) : (
     <>
       <BrowserRouter>
-        <NavBar />
+        <UserContext.Provider
+          value={{
+            currentUser,
+          }}
+        >
+          <NavBar />
+          <RoutesList />
+        </UserContext.Provider>
       </BrowserRouter>
 
       <UpdateProfileForm />
