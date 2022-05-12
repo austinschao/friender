@@ -50,6 +50,14 @@ function FrienderApp() {
     localStorage.setItem(TOKEN_NAME, newUserToken);
   }
 
+  /** Make API call to log in user */
+
+  async function handleLogin(formData) {
+    const userToken = await FrienderAPI.login(formData);
+    setToken(userToken);
+    localStorage.setItem(TOKEN_NAME, userToken);
+  }
+
   return isLoading ? (
     <p>Loading . . .</p>
   ) : (
@@ -58,6 +66,8 @@ function FrienderApp() {
         <UserContext.Provider
           value={{
             currentUser,
+            handleSignup,
+            handleLogin,
           }}
         >
           <NavBar />
