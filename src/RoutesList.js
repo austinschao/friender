@@ -32,7 +32,7 @@ function RoutesList({ handleLogin, handleSignup }) {
         {currentUser && (
           <>
             <Route path="/users/:username" element={<UserProfile />} />
-            <Route path="/users/:username/friends" element={<FriendsList />} />
+            <Route path="/users/:username/friends" element={<FriendsList currentUser={currentUser} />} />
             <Route path="/companies/:handle" element={<FindFriends />} />
           </>
         )}

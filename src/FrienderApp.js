@@ -10,13 +10,14 @@ import RoutesList from "./RoutesList";
 
 const TOKEN_NAME = "token";
 
-/**
+/** Manages Friender Application
  *
  * state -> currentUser {matched:[{matchedUsers}, ...], potentialMatches: [{users}, ...]}
+ *       -> isLoading (boolean) | token (JWT)
  *
- * props
+ * props -> none
  *
- *
+ * App -> FrienderApp -> {Browser Router, NavBar, RoutesList}
  */
 
 function FrienderApp() {
