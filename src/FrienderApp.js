@@ -58,6 +58,14 @@ function FrienderApp() {
     localStorage.setItem(TOKEN_NAME, userToken);
   }
 
+  /** Handles logout, removes currentUser, token, and localStorage */
+
+  function handleLogout() {
+    setCurrentUser(null);
+    setToken(null);
+    localStorage.removeItem(TOKEN_NAME);
+  }
+
   return isLoading ? (
     <p>Loading . . .</p>
   ) : (
@@ -65,13 +73,15 @@ function FrienderApp() {
       <BrowserRouter>
         <UserContext.Provider
           value={{
-            currentUser,
-            handleSignup,
-            handleLogin,
+            currentUser
           }}
         >
           <NavBar />
-          <RoutesList />
+          <RoutesList
+            handleSignup={handleSignup}
+            handleLogin={handleLogin}
+            handleLogout={logout}
+          />
         </UserContext.Provider>
       </BrowserRouter>
 

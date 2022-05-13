@@ -49,6 +49,14 @@ class FrienderAPI {
     console.log("USER RES", res);
     return res;
   }
+
+  /** Updates a user's profile */
+
+  static async updateUser(username, data) {
+    let res = await this.request(`user/${username}`, data, 'patch');
+    console.log("USER RES", res);
+    return res;
+  }
 }
 
 export default FrienderAPI;
