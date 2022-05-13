@@ -32,7 +32,7 @@ function UpdateProfileForm() {
   return (
     <>
       <form className="UpdateUserForm col-md-6" onSubmit={onImageSubmit}>
-        <h2 className="mt-2">Edit Profile</h2>
+        <h2 className="mt-2">Edit Image</h2>
         <div className="mb-3 col-md-9 mx-auto mt-2">
           <input
             type="file"
