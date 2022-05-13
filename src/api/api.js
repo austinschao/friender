@@ -58,8 +58,14 @@ class FrienderAPI {
   /** Updates a user's profile */
 
   static async updateUser(username, formData) {
-    let res = await this.request(`user/${username}`, formData, "patch");
+    let res = await this.request(`users/${username}`, formData, "patch");
     return res;
+  }
+
+  /** Uploads a user's profile image */
+
+  static async uploadImage(username, formData) {
+    let res = await this.request(`users/${username}/upload`, formData.image, "post",);
   }
 }
 

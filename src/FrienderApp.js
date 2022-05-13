@@ -1,12 +1,13 @@
-import UpdateProfileForm from "./UpdateImageForm";
+import UpdateProfileForm from "./forms/UpdateImageForm";
+import axios from "axios";
 
 import { useState, useEffect, useContext } from "react";
 import { BrowserRouter } from "react-router-dom";
 import UserContext from "./userContext";
-import FrienderAPI from "./api";
+import FrienderAPI from "./api/api";
 import jwtDecode from "jwt-decode";
-import NavBar from "./NavBar";
-import RoutesList from "./RoutesList";
+import NavBar from "./routes-nav/NavBar";
+import RoutesList from "./routes-nav/RoutesList";
 
 const TOKEN_NAME = "token";
 
@@ -28,18 +29,25 @@ function FrienderApp() {
   useEffect(
     function getUserOnMount() {
       async function getUser() {
-        if (token) {
-          FrienderAPI.token = token;
-          // .sub is where username is located
-          const username = jwtDecode(token).sub;
-          // retrieve basic userinfo from api
-          const userInfo = await FrienderAPI.getUser(username);
-          // retrieve matchlists from api
-          const userMatches = await FrienderAPI.getUserMatches(username);
-          setCurrentUser({ ...userInfo, ...userMatches });
+        try {
+          if (token) {
+            FrienderAPI.token = token;
+            // .sub is where username is located
+            const username = jwtDecode(token).sub;
+            // retrieve basic userinfo from api
+            const userInfo = await FrienderAPI.getUser(username);
+            // retrieve matchlists from api
+            const userMatches = await FrienderAPI.getUserMatches(username);
+            setCurrentUser({ ...userInfo, ...userMatches });
+          }
+        } catch (err) {
+          if (err) {
+            console.log(err, "it went here whats the error");
+            localStorage.removeItem(TOKEN_NAME);
+          }
         }
-        setIsLoading(false);
       }
+      setIsLoading(false);
       getUser();
     },
     [token]
@@ -81,6 +89,28 @@ function FrienderApp() {
     return updatedUserInfo;
   }
 
+  /** Handles uploading a user's profile image */
+
+  async function uploadUserImage(username, formData) {
+    console.log("IMAGE FORM DATA", formData);
+    const imageFormData = new FormData();
+    imageFormData.append('file', formData);
+    const uploadedFile = await axios({
+      method: "post",
+      url: `http://localhost:3001/users/${username}/upload`,
+      data: imageFormData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${FrienderAPI.token}`
+      }
+    });
+    const updatedUser = await FrienderAPI.getUser(username);
+
+    setCurrentUser(user => ({
+      ...user, image_url: updatedUser.image_url
+    }));
+  }
+
   return isLoading ? (
     <p>Loading . . .</p>
   ) : (
@@ -90,13 +120,15 @@ function FrienderApp() {
           value={{
             currentUser,
             handleUserUpdate,
+            uploadUserImage
           }}
         >
-          <NavBar />
+          <NavBar
+            handleLogout={handleLogout}
+          />
           <RoutesList
             handleSignup={handleSignup}
             handleLogin={handleLogin}
-            handleLogout={handleLogout}
           />
         </UserContext.Provider>
       </BrowserRouter>

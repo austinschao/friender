@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import UserContext from "./userContext";
+import UserContext from "../userContext";
 import { useContext } from "react";
 
-function NavBar({ logout }) {
+function NavBar({ handleLogout }) {
   const { currentUser } = useContext(UserContext);
 
   const loggedOut = (
@@ -33,12 +33,12 @@ function NavBar({ logout }) {
         </Link>
       </li>
       <li className="nav-item">
-        <Link to={"/users/:username/matchme"} className="nav-link" href="#">
+        <Link to={"/users/:username/findfriends"} className="nav-link" href="#">
           Find a Friend
         </Link>
       </li>
       <li className="nav-item">
-        <Link to={"/"} onClick={logout} className="nav-link" href="#">
+        <Link to={"/"} onClick={handleLogout} className="nav-link" href="#">
           Logout
         </Link>
       </li>

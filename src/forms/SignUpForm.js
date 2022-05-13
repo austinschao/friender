@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import UserContext from "./userContext";
+import UserContext from "../userContext";
 
 /** Signup form component
  *
@@ -12,9 +12,10 @@ function SignUpForm({ handleSignup }) {
   const initialState = {
     username: "",
     password: "",
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
+    location: ""
   };
 
   const [formData, setFormData] = useState(initialState);

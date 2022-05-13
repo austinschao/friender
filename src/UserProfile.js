@@ -1,5 +1,5 @@
-import UpdateImageForm from "./UpdateImageForm";
-import UpdateUserInfoForm from "./UpdateUserInfoForm";
+import UpdateImageForm from "./forms/UpdateImageForm";
+import UpdateUserInfoForm from "./forms/UpdateUserInfoForm";
 
 function UserProfile() {
   return (
