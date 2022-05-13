@@ -8,7 +8,7 @@ import UserContext from "./userContext";
  *
  */
 
-function SignUpForm() {
+function SignUpForm({ handleSignup }) {
   const initialState = {
     username: "",
     password: "",
@@ -16,7 +16,7 @@ function SignUpForm() {
     lastName: "",
     email: "",
   };
-  const { handleSignup } = useContext(UserContext);
+
   const [formData, setFormData] = useState(initialState);
 
   /** Update form input. */
@@ -63,3 +63,4 @@ function SignUpForm() {
 }
 
 export default SignUpForm;
+

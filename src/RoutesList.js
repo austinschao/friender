@@ -1,21 +1,29 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-import { useContext } from "react";
-import UserContext from "./userContext";
 import Homepage from "./Homepage";
-import Profile from "./Profile";
+import UserProfile from "./UserProfile";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignUpForm";
 import FriendsList from "./FriendsList";
 import FindFriends from "./FindFriends";
+import { useContext } from "react";
+import UserContext from "./userContext";
 
-function RoutesList({ login, signup, currentUser }) {
+function RoutesList({ handleLogin, handleSignup }) {
+  const { currentUser } = useContext(UserContext);
+
   return (
     <div className="pt-5">
       <Routes>
         {!currentUser && (
           <>
-            <Route path="/login" element={<LoginForm login={login} />} />
-            <Route path="/signup" element={<SignupForm signup={signup} />} />
+            <Route
+              path="/login"
+              element={<LoginForm handleLogin={handleLogin} />}
+            />
+            <Route
+              path="/signup"
+              element={<SignupForm handleSignup={handleSignup} />}
+            />
           </>
         )}
 
@@ -23,7 +31,7 @@ function RoutesList({ login, signup, currentUser }) {
 
         {currentUser && (
           <>
-            <Route path="/users/:username" element={<Profile />} />
+            <Route path="/users/:username" element={<UserProfile />} />
             <Route path="/users/:username/friends" element={<FriendsList />} />
             <Route path="/companies/:handle" element={<FindFriends />} />
           </>

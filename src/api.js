@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
+const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 
 /** API Class.
  *
@@ -31,14 +31,13 @@ class FrienderAPI {
 
   /** Sign up a user, returns token */
   static async signup(formData) {
-    let res = await this.request("/signup", formData, "post");
-    console.log("token", res.token);
+    let res = await this.request("signup", formData, "post");
     return res.token;
   }
 
   /** Log in a user, return token */
   static async login(formData) {
-    let res = await this.request("/login", formData, "post");
+    let res = await this.request("login", formData, "post");
     return res.token;
   }
 
@@ -46,15 +45,20 @@ class FrienderAPI {
 
   static async getUser(username) {
     let res = await this.request(`users/${username}`);
-    console.log("USER RES", res);
+    return res;
+  }
+
+  /** Get user matches */
+
+  static async getUserMatches(username) {
+    let res = await this.request(`users/${username}/lists`);
     return res;
   }
 
   /** Updates a user's profile */
 
-  static async updateUser(username, data) {
-    let res = await this.request(`user/${username}`, data, 'patch');
-    console.log("USER RES", res);
+  static async updateUser(username, formData) {
+    let res = await this.request(`user/${username}`, formData, "patch");
     return res;
   }
 }

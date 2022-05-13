@@ -1,4 +1,4 @@
-import UpdateProfileForm from "./UpdateProfileForm";
+import UpdateProfileForm from "./UpdateImageForm";
 
 import { useState, useEffect, useContext } from "react";
 import { BrowserRouter } from "react-router-dom";
@@ -18,6 +18,7 @@ const TOKEN_NAME = "token";
  *
  *
  */
+
 function FrienderApp() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,12 +29,13 @@ function FrienderApp() {
       async function getUser() {
         if (token) {
           FrienderAPI.token = token;
-          const username = jwtDecode(token).username;
+          // .sub is where username is located
+          const username = jwtDecode(token).sub;
+          // retrieve basic userinfo from api
           const userInfo = await FrienderAPI.getUser(username);
-
-          setCurrentUser({
-            ...userInfo,
-          });
+          // retrieve matchlists from api
+          const userMatches = await FrienderAPI.getUserMatches(username);
+          setCurrentUser({ ...userInfo, ...userMatches });
         }
         setIsLoading(false);
       }
@@ -66,6 +68,18 @@ function FrienderApp() {
     localStorage.removeItem(TOKEN_NAME);
   }
 
+  /** Handles updating a user's basic info */
+  async function handleUserUpdate(username, formData) {
+    const updatedUserInfo = await FrienderAPI.updateUser(username, formData);
+
+    setCurrentUser((user) => ({
+      ...user,
+      ...updatedUserInfo,
+    }));
+
+    return updatedUserInfo;
+  }
+
   return isLoading ? (
     <p>Loading . . .</p>
   ) : (
@@ -73,19 +87,18 @@ function FrienderApp() {
       <BrowserRouter>
         <UserContext.Provider
           value={{
-            currentUser
+            currentUser,
+            handleUserUpdate,
           }}
         >
           <NavBar />
           <RoutesList
             handleSignup={handleSignup}
             handleLogin={handleLogin}
-            handleLogout={logout}
+            handleLogout={handleLogout}
           />
         </UserContext.Provider>
       </BrowserRouter>
-
-      <UpdateProfileForm />
     </>
   );
 }

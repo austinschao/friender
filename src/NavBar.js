@@ -3,18 +3,17 @@ import UserContext from "./userContext";
 import { useContext } from "react";
 
 function NavBar({ logout }) {
-
-  // const { currentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   const loggedOut = (
     <ul className="navbar-nav ms-auto">
       <li className="nav-item">
-        <Link className="nav-link" to="/login">
+        <Link to={"/login"} className="nav-link" href="#">
           Login
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/signup">
+        <Link to={"/signup"} className="nav-link" href="#">
           Sign Up
         </Link>
       </li>
@@ -24,22 +23,22 @@ function NavBar({ logout }) {
   const loggedIn = (
     <ul className="navbar-nav ms-auto">
       <li className="nav-item">
-        <Link className="nav-link" to="/users/:username">
+        <Link to={"/users/:username"} className="nav-link" href="#">
           Profile
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/users/:username/friends">
+        <Link to={"/users/:username/friends"} className="nav-link" href="#">
           Friends
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/users/:username/matchme">
+        <Link to={"/users/:username/matchme"} className="nav-link" href="#">
           Find a Friend
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/" onClick={logout}>
+        <Link to={"/"} onClick={logout} className="nav-link" href="#">
           Logout
         </Link>
       </li>
@@ -64,7 +63,7 @@ function NavBar({ logout }) {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarColor03">
-          {loggedOut}
+          {currentUser ? loggedIn : loggedOut}
         </div>
       </div>
     </nav>

@@ -5,19 +5,13 @@ import axios from "axios";
 function UpdateProfileForm() {
   // const { user, handleUserUpdate } = useContext(UserContext);
   // const { username, firstName, lastName, email } = user;
-  const [hasUpdated, setHasUpdated] = useState(false);
   const initialState = {
-    image: "",
+    image: null,
   };
   const [formData, setFormData] = useState(initialState);
   const [image, setImage] = useState([]);
-  const [imgUrl, setImgUrl] = useState([])
-
-  /** Update form inputs */
-  function handleChange(evt) {
-    const { name, value } = evt.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  }
+  const [imgUrl, setImgUrl] = useState([]);
+  const [hasUpdated, setHasUpdated] = useState(false);
 
   function handleImageChange(evt) {
     const { files } = evt.target;

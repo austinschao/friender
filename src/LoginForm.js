@@ -1,5 +1,4 @@
-import { useState, useContext } from "react";
-import UserContext from "./userContext";
+import { useState } from "react";
 
 /** Login form component
  *
@@ -8,12 +7,12 @@ import UserContext from "./userContext";
  *
  */
 
-function LoginForm() {
+function LoginForm({ handleLogin }) {
   const initialState = {
     username: "",
     password: "",
   };
-  const { handleLogin } = useContext(UserContext);
+
   const [formData, setFormData] = useState(initialState);
 
   /** Update form input. */
