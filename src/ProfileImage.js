@@ -6,8 +6,10 @@ function ProfileImage() {
 
   return (
 
-    <div className="row">
-      <img className="img-thumbnail col-md-4" src={currentUser.image_url} />
+    <div className="card">
+      <div>
+        <img className="img-thumbnail col-md-4" src={currentUser.image_url} />
+      </div>
     </div>
   );
 }
