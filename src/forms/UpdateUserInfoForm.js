@@ -45,6 +45,10 @@ function UpdateUserInfoForm() {
       <div className="mb-3 col-md-9 mx-auto mt-2">
         {Object.keys(formData).map((f) => (
           <div className="p-1" key={f}>
+            <label
+              htmlFor={f}
+              className="form-label"
+            >{f.replace("_", " ")}:</label>
             <input
               id={f}
               name={f}

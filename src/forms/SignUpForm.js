@@ -43,7 +43,7 @@ function SignUpForm({ handleSignup }) {
           id={f}
           name={f}
           className="form-control"
-          placeholder={`Enter ${f}...`}
+          placeholder={`Enter ${f.replace('_', " ")}...`}
           onChange={handleChange}
           value={formData[f]}
           aria-label={f}
