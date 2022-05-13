@@ -6,13 +6,15 @@ import UserCard from "./UserCard";
  * props -> currentUser
  */
 function FriendsList({ currentUser }) {
-  const friends = currentUser.matched.map(friend => <UserCard key={friend.username} user={friend} />);
+  const friends = currentUser.matched.map((friend) => (
+    <UserCard key={friend.username} user={friend} />
+  ));
 
   return (
     <div>
-      {friends}
+      {currentUser.matched.length ? friends : <p>Go get some friends!</p>}
     </div>
   );
 }
 
-export default FriendsList;;
+export default FriendsList;

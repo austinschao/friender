@@ -23,7 +23,7 @@ function FindFriends() {
   // Need useEffect to fix list of potentialMatches when a user swipes left or right
   // Need algo to randomize which person user sees at a time
   // should cause useEffect for requesting new data on currentUser again from API...
-  return <h1> Hello </h1>;
+  return <h1>  </h1>;
 };
 
 export default FindFriends;
