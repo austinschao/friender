@@ -1,4 +1,5 @@
 import FrienderApp from "./FrienderApp";
+import "./App.css";
 
 function App() {
   return (
