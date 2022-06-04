@@ -76,6 +76,14 @@ function FrienderApp() {
     setToken(null);
     localStorage.removeItem(TOKEN_NAME);
   }
+  /** Handles adding a match */
+  async function handleMatch(currUsername, otherUsername) {
+    await FrienderAPI.addMatch(currUsername, otherUsername);
+  }
+  /** Handles rejecting a match */
+  async function handleReject(currUsername, otherUsername) {
+    await FrienderAPI.addReject(currUsername, otherUsername);
+  }
 
   /** Handles updating a user's basic info */
   async function handleUserUpdate(username, formData) {
@@ -129,6 +137,8 @@ function FrienderApp() {
           <RoutesList
             handleSignup={handleSignup}
             handleLogin={handleLogin}
+            handleMatch={handleMatch}
+            handleReject={handleReject}
           />
         </UserContext.Provider>
       </BrowserRouter>
