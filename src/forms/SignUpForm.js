@@ -15,7 +15,10 @@ function SignUpForm({ handleSignup }) {
     first_name: "",
     last_name: "",
     email: "",
-    location: ""
+    location: "",
+    friend_radius: "",
+    hobbies: "",
+    interests: ""
   };
 
   const [formData, setFormData] = useState(initialState);

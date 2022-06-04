@@ -31,7 +31,7 @@ function UpdateProfileForm() {
 
   return (
     <>
-      <form className="UpdateUserForm col-md-6" onSubmit={onImageSubmit}>
+      <form className="UpdateUserForm col-md-6" encType="multipart/form-data" onSubmit={onImageSubmit}>
         <h2 className="mt-2">Edit Image</h2>
         <div className="mb-3 col-md-9 mx-auto mt-2">
           <input
@@ -41,7 +41,7 @@ function UpdateProfileForm() {
             className="form-control"
             // placeholder={`Enter ${f}...`}
             onChange={handleImageChange}
-            // value={formData[f]}
+          // value={formData[f]}
           />
 
           <button className="btn btn-info">Save Changes!</button>

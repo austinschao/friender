@@ -4,7 +4,7 @@ import UserContext from "../userContext";
 function UpdateUserInfoForm() {
   const [hasUpdated, setHasUpdated] = useState(false);
   const { currentUser, handleUserUpdate } = useContext(UserContext);
-  const { username, first_name, last_name, email, hobbies, interests, location } =
+  const { username, first_name, last_name, email, hobbies, interests, location, friend_radius } =
     currentUser;
   const [formData, setFormData] = useState({
     first_name,
@@ -12,7 +12,8 @@ function UpdateUserInfoForm() {
     email,
     hobbies,
     interests,
-    location
+    location,
+    friend_radius,
   });
 
   /** Update form inputs */
@@ -24,14 +25,15 @@ function UpdateUserInfoForm() {
   /** Call parent function and clear form. */
   async function handleSubmit(evt) {
     evt.preventDefault();
-    const { first_name, last_name, email, hobbies, interests, location } = formData;
+    const { first_name, last_name, email, hobbies, interests, location, friend_radius } = formData;
     const updatedData = await handleUserUpdate(username, {
       first_name,
       last_name,
       email,
       location,
       hobbies,
-      interests
+      interests,
+      friend_radius
     });
     setFormData((formData) => ({
       ...formData
