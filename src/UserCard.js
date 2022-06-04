@@ -13,8 +13,8 @@ function UserCard({ user }) {
           <div className="card-body">
             <h5 className="card-title">{user.first_name}</h5>
             <ul>
-              <li className="card-text">Interests: {user.interests}</li>
-              <li className="card-text">Hobbies: {user.hobbies}</li>
+              <li className="card-text">Interests: {user.interests.replace(/[\[\]']+/g, '')}</li>
+              <li className="card-text">Hobbies: {user.hobbies.replace(/[\[\]']+/g, '')}</li>
             </ul>
           </div>
         </div>
