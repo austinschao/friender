@@ -1,7 +1,20 @@
 import userContext from "./userContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 function UserCard({ user, handleMatch, handleReject }) {
   const { currentUser, setCurrentUser } = useContext(userContext);
+  const [disabled, setDisabled] = useState(false);
+
+  function handleClickMatch() {
+    setDisabled(true);
+    handleMatch(currentUser.username, user.username);
+    setDisabled(false);
+  }
+
+  function handleClickReject() {
+    setDisabled(true);
+    handleMatch(currentUser.username, user.username);
+    setDisabled(false);
+  }
 
   // console.log(user);
   // Have to change default image to a URL so it can be displayed
@@ -21,8 +34,8 @@ function UserCard({ user, handleMatch, handleReject }) {
               <li className="card-text">Hobbies: {user.hobbies.replace(/[\[\]']+/g, '')}</li>
             </ul>
             <div className="d-flex justify-content-center">
-              <button className="btn btn-success btn-sm mx-1" onClick={() => handleMatch(currentUser.username, user.username)}>Match</button>
-              <button className="btn btn-danger btn-sm mx-1" onClick={() => handleMatch(currentUser.username, user.username)}>Reject</button>
+              <button disabled={disabled} className="btn btn-success btn-sm mx-1" onClick={handleClickMatch}>Match</button>
+              <button disabled={disabled} className="btn btn-danger btn-sm mx-1" onClick={handleClickReject}>Reject</button>
             </div>
           </div>
         </div>

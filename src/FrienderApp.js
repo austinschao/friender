@@ -1,7 +1,5 @@
-import UpdateProfileForm from "./forms/UpdateImageForm";
 import axios from "axios";
-
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import UserContext from "./userContext";
 import FrienderAPI from "./api/api";

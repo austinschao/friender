@@ -1,8 +1,9 @@
 import UserCard from "./UserCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import userContext from "./userContext";
 import { useContext } from "react";
 import FrienderAPI from "./api/api";
+import { randomChoice } from "./utils/utils";
 
 
 /** Manages list of potential friends you can match with
@@ -19,29 +20,40 @@ import FrienderAPI from "./api/api";
  */
 
 function FindFriends() {
-  const { currentUser, setCurrentUser } = useContext(userContext);
+  const { currentUser } = useContext(userContext);
   const [potentialMatches, setPotentialMatches] = useState(currentUser.potential_users);
+  const [potentialMatch, setPotentialMatch] = useState(randomChoice(potentialMatches));
 
-  // Need useEffect to fix list of potentialMatches when a user swipes left or right
-  // Need algo to randomize which person user sees at a time
-  // should cause useEffect for requesting new data on currentUser again from API...
+  useEffect(
+    function getPotentialMatchesOnMount() {
+      async function getPotentialMatches() {
+        const potentialFriends = await FrienderAPI.getUserMatches(currentUser.username);
+        setPotentialMatches(potentialFriends.potential_users);
+      }
+      getPotentialMatches();
+    }, [potentialMatch]);
+
 
   async function handleMatch(currUsername, otherUsername) {
     await FrienderAPI.addMatch(currUsername, otherUsername);
+    setPotentialMatch(randomChoice(potentialMatches));
   }
 
   async function handleReject(currUsername, otherUsername) {
     await FrienderAPI.addReject(currUsername, otherUsername);
+    setPotentialMatch(randomChoice(potentialMatches));
   }
 
-  const potentialFriends = currentUser.potential_users.map((friend) => (
-    <UserCard key={friend.username} user={friend} handleMatch={handleMatch} handleReject={handleReject} />
-  ));
 
   return (
     <div>
-      <h1>Here are your potential friends!</h1>
-      {potentialFriends}
+      <h1>Here is your potential friend!</h1>
+      <UserCard
+        key={potentialMatch.username}
+        user={potentialMatch}
+        handleMatch={handleMatch}
+        handleReject={handleReject}>
+      </UserCard>
     </div>
   );
 };
