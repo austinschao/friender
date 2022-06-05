@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import userContext from "./userContext";
 import { useContext } from "react";
 import FrienderAPI from "./api/api";
-import { randomChoice } from "./utils/utils";
+import { debounce, randomChoice } from "./utils/utils";
 
 
 /** Manages list of potential friends you can match with
@@ -34,27 +34,43 @@ function FindFriends() {
     }, [potentialMatch]);
 
 
-  async function handleMatch(currUsername, otherUsername) {
-    await FrienderAPI.addMatch(currUsername, otherUsername);
+  async function handleMatch(currUser, otherUser) {
+    await FrienderAPI.addMatch(currUser.username, otherUser.username);
     setPotentialMatch(randomChoice(potentialMatches));
   }
 
-  async function handleReject(currUsername, otherUsername) {
-    await FrienderAPI.addReject(currUsername, otherUsername);
+  async function handleReject(currUser, otherUser) {
+    await FrienderAPI.addReject(currUser.username, otherUser.username);
     setPotentialMatch(randomChoice(potentialMatches));
   }
+
+  const handleMatchDebounce = debounce(handleMatch);
+
+
+  const handleRejectDebounce = debounce(handleReject);
+
+
 
 
   return (
     <div>
-      <h1>Here is your potential friend!</h1>
-      <UserCard
-        key={potentialMatch.username}
-        user={potentialMatch}
-        handleMatch={handleMatch}
-        handleReject={handleReject}>
-      </UserCard>
-    </div>
+      {potentialMatch ? (
+        <>
+          <h1>Here is your potential friend!</h1>
+          <UserCard
+            key={potentialMatch.username}
+            user={potentialMatch}
+            handleMatch={handleMatchDebounce}
+            handleReject={handleRejectDebounce}>
+          </UserCard>
+        </>
+      ) : (
+        <>
+          <h3>Sorry, you are out of friends in your area.</h3>
+          <p>Either wait for new friends to join or expand your radius.</p>
+        </>
+      )}
+    </div >
   );
 };
 
