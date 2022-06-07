@@ -1,7 +1,5 @@
-import UpdateProfileForm from "./forms/UpdateImageForm";
 import axios from "axios";
-
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import UserContext from "./userContext";
 import FrienderAPI from "./api/api";
@@ -64,9 +62,9 @@ function FrienderApp() {
   /** Make API call to log in user */
 
   async function handleLogin(formData) {
-    const userToken = await FrienderAPI.login(formData);
-    setToken(userToken);
-    localStorage.setItem(TOKEN_NAME, userToken);
+    const resp = await FrienderAPI.login(formData);
+    setToken(resp.token);
+    localStorage.setItem(TOKEN_NAME, resp.token);
   }
 
   /** Handles logout, removes currentUser, token, and localStorage */
@@ -75,6 +73,14 @@ function FrienderApp() {
     setCurrentUser(null);
     setToken(null);
     localStorage.removeItem(TOKEN_NAME);
+  }
+  /** Handles adding a match */
+  async function handleMatch(currUsername, otherUsername) {
+    await FrienderAPI.addMatch(currUsername, otherUsername);
+  }
+  /** Handles rejecting a match */
+  async function handleReject(currUsername, otherUsername) {
+    await FrienderAPI.addReject(currUsername, otherUsername);
   }
 
   /** Handles updating a user's basic info */
@@ -129,6 +135,8 @@ function FrienderApp() {
           <RoutesList
             handleSignup={handleSignup}
             handleLogin={handleLogin}
+            handleMatch={handleMatch}
+            handleReject={handleReject}
           />
         </UserContext.Provider>
       </BrowserRouter>

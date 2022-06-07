@@ -38,7 +38,7 @@ class FrienderAPI {
   /** Log in a user, return token */
   static async login(formData) {
     let res = await this.request("login", formData, "post");
-    return res.token;
+    return res;
   }
 
   /** Get details on a user */
@@ -66,6 +66,19 @@ class FrienderAPI {
 
   static async uploadImage(username, formData) {
     let res = await this.request(`users/${username}/upload`, formData.image, "post",);
+  }
+
+  /** Add a user to curr user's list of hope to matches */
+
+  static async addMatch(username, other_username) {
+    let res = await this.request(`users/${username}/match`, { "username": other_username }, "post");
+    return res;
+  }
+
+  /** Add a user to curr user's list of rejected users */
+  static async addReject(username, other_username) {
+    let res = await this.request(`users/${username}/reject`, { "username": other_username }, "post");
+    return res;
   }
 }
 
