@@ -38,7 +38,7 @@ class FrienderAPI {
   /** Log in a user, return token */
   static async login(formData) {
     let res = await this.request("login", formData, "post");
-    return res.token;
+    return res;
   }
 
   /** Get details on a user */

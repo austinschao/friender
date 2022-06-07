@@ -62,9 +62,9 @@ function FrienderApp() {
   /** Make API call to log in user */
 
   async function handleLogin(formData) {
-    const userToken = await FrienderAPI.login(formData);
-    setToken(userToken);
-    localStorage.setItem(TOKEN_NAME, userToken);
+    const resp = await FrienderAPI.login(formData);
+    setToken(resp.token);
+    localStorage.setItem(TOKEN_NAME, resp.token);
   }
 
   /** Handles logout, removes currentUser, token, and localStorage */
