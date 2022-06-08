@@ -7,6 +7,7 @@ import FriendsList from "../FriendsList";
 import FindFriends from "../FindFriends";
 import { useContext } from "react";
 import UserContext from "../userContext";
+import ChatRoom from "../ChatRoom";
 
 function RoutesList({ handleLogin, handleSignup }) {
   const { currentUser } = useContext(UserContext);
@@ -34,6 +35,7 @@ function RoutesList({ handleLogin, handleSignup }) {
             <Route path="/users/:username" element={<UserProfile />} />
             <Route path="/users/:username/friends" element={<FriendsList currentUser={currentUser} />} />
             <Route path="/users/:username/findfriends" element={<FindFriends currentUser={currentUser} />} />
+            <Route path="/users/:username/chat" element={<ChatRoom currentUser={currentUser} />} />
           </>
         )}
 

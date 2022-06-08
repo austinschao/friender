@@ -80,6 +80,12 @@ class FrienderAPI {
     let res = await this.request(`users/${username}/reject`, { "username": other_username }, "post");
     return res;
   }
+
+  /** Get a user's list of messages */
+  static async getMessages(username) {
+    let res = await this.request(`users/${username}/messages`);
+    return res;
+  }
 }
 
 export default FrienderAPI;

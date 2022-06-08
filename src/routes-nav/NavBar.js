@@ -38,6 +38,11 @@ function NavBar({ handleLogout }) {
         </Link>
       </li>
       <li className="nav-item">
+        <Link to={"/users/:username/chat"} className="nav-link" href="#">
+          Chat
+        </Link>
+      </li>
+      <li className="nav-item">
         <Link to={"/"} onClick={handleLogout} className="nav-link" href="#">
           Logout
         </Link>
