@@ -96,6 +96,16 @@ function ChatRoom() {
     }
   }
 
+  function handlePrivateMessage(evt) {
+    const [username, message] = evt.target.parentNode.children;
+    private_socket.emit('private_message', { username, message });
+  }
+
+  private_socket.on('new_private_message', function (msg) {
+    console.log('it wnet here');
+    alert(msg);
+  });
+
 
   return (
     <div>
@@ -116,6 +126,13 @@ function ChatRoom() {
       <div>
         <input type="text" id="username" />
         <button id="send_username" onClick={(evt) => handleUsername(evt)}>Send Username</button>
+      </div>
+      <div>
+        <div>
+          Send To: <input type="text" id="send_to_username" />
+          Message: <input type="text" id="private_message" />
+          <button id="send_private_message" onClick={(evt) => handlePrivateMessage(evt)}>Send</button>
+        </div>
       </div>
     </div>
   );
