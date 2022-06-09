@@ -61,7 +61,6 @@ function ChatRoom() {
   });
 
   private_socket.on('new_private_message', function (msg) {
-    console.log('it wnet here');
     setMessages([...messages, msg]);
 
     // socket.send('private message', msg);
