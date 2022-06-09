@@ -126,7 +126,8 @@ function FrienderApp() {
           value={{
             currentUser,
             handleUserUpdate,
-            uploadUserImage
+            uploadUserImage,
+            token
           }}
         >
           <NavBar

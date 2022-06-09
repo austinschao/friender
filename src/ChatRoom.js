@@ -16,7 +16,7 @@ let private_socket = io(`http://localhost:3001/private`);
 
 function ChatRoom() {
   // create state using hooks
-  const { currentUser } = React.useContext(UserContext);
+  const { currentUser, token } = React.useContext(UserContext);
   const [messages, setMessages] = React.useState([
   ]);
   const [message, setMessage] = React.useState("");
@@ -60,11 +60,25 @@ function ChatRoom() {
     alert(msg);
   });
 
+  private_socket.on('new_private_message', function (msg) {
+    console.log('it wnet here');
+    setMessages([...messages, msg]);
+
+    // socket.send('private message', msg);
+    // alert(msg);
+  });
+
+  // socket.on("message", msg => {
+  //   console.log("it went here after???");
+  //   setMessages([...messages, msg]);
+  // });
+
   // This method will call when first time app render and
   // Everytime message length changes
   // Each time a new message is created, it will add to the list of messages
 
   function getMessages() {
+    // If console.log is in here, it would console 9 times each time message is added
     socket.on("message", msg => {
       setMessages([...messages, msg]);
     });
@@ -88,7 +102,7 @@ function ChatRoom() {
 
   function handleUsername(evt) {
     if (evt.target.previousSibling.value !== "") {
-      private_socket.emit('username', evt.target.previousSibling.value);
+      private_socket.emit('username', { username: evt.target.previousSibling.value, token: token });
       evt.target.previousSibling.value = "";
     } else {
       console.log(evt);
@@ -98,13 +112,10 @@ function ChatRoom() {
 
   function handlePrivateMessage(evt) {
     const [username, message] = evt.target.parentNode.children;
-    private_socket.emit('private_message', { username, message });
+    console.log(evt);
+    console.log(username.value, message.value);
+    private_socket.emit('private_message', { username: username.value, message: message.value });
   }
-
-  private_socket.on('new_private_message', function (msg) {
-    console.log('it wnet here');
-    alert(msg);
-  });
 
 
   return (
@@ -134,7 +145,7 @@ function ChatRoom() {
           <button id="send_private_message" onClick={(evt) => handlePrivateMessage(evt)}>Send</button>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 
