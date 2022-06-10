@@ -10,7 +10,7 @@ function ChatRoom({ privateSocket, socket }) {
   const [privateMessage, setPrivateMessage] = React.useState("");
   const [sendToUser, setSendToUser] = React.useState("");
   const [currRoom, setCurrRoom] = React.useState("");
-  const [rooms, setRooms] = React.useState([]);
+  const [roomNames, setRoomNames] = React.useState([]);
 
 
   // component update method as hook (useEffect)
@@ -51,6 +51,11 @@ function ChatRoom({ privateSocket, socket }) {
 
   socket.on("message", msg => {
     setMessages([...messages, msg]);
+  });
+
+  privateSocket.on('room_name', rooms => {
+    console.log(rooms);
+    setRoomNames([...roomNames, ...rooms]);
   });
 
   // socket.on("message", msg => {
@@ -94,11 +99,12 @@ function ChatRoom({ privateSocket, socket }) {
   }
 
   function printSysMsg(message) {
-
+    setMessages([...messages, message]);
   }
 
   function handleJoin(evt) {
     const [room] = evt.target.value;
+    console.log(evt);
     if (room === currRoom) {
       let message = `You are already in ${room} room.`;
       printSysMsg(message);
@@ -121,6 +127,15 @@ function ChatRoom({ privateSocket, socket }) {
   return (
     <div>
       <h1>Welcome to the chat!</h1>
+      {/* Display Room Selection */}
+      {/* <div>
+        <h4>Rooms</h4>
+        <ul>
+          {roomNames.length > 0 && roomNames.map((room, i) => (
+            <li key={i} onClick={evt => handleJoin(evt)}>{room}</li>
+          ))}
+        </ul>
+      </div> */}
       {messages.length > 0 &&
         messages.map((msg, i) => (
           <div key={i}>
