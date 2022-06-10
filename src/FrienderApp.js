@@ -6,8 +6,16 @@ import FrienderAPI from "./api/api";
 import jwtDecode from "jwt-decode";
 import NavBar from "./routes-nav/NavBar";
 import RoutesList from "./routes-nav/RoutesList";
+import io from "socket.io-client";
+
 
 const TOKEN_NAME = "token";
+
+// connect with server using socket io
+// const socket = io.connect("http://localhost:3001");
+
+//name space for private messages
+const privateSocket = io(`http://localhost:3001/private`);
 
 /** Manages Friender Application
  *
@@ -23,6 +31,7 @@ function FrienderApp() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem(TOKEN_NAME));
+
 
   useEffect(
     function getUserOnMount() {
@@ -134,6 +143,8 @@ function FrienderApp() {
             handleLogout={handleLogout}
           />
           <RoutesList
+            // socket={socket}
+            privateSocket={privateSocket}
             handleSignup={handleSignup}
             handleLogin={handleLogin}
             handleMatch={handleMatch}
