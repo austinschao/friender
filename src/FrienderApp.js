@@ -12,7 +12,7 @@ import io from "socket.io-client";
 const TOKEN_NAME = "token";
 
 // connect with server using socket io
-// const socket = io.connect("http://localhost:3001");
+const socket = io.connect("http://localhost:3001");
 
 //name space for private messages
 const privateSocket = io(`http://localhost:3001/private`);
@@ -143,7 +143,7 @@ function FrienderApp() {
             handleLogout={handleLogout}
           />
           <RoutesList
-            // socket={socket}
+            socket={socket}
             privateSocket={privateSocket}
             handleSignup={handleSignup}
             handleLogin={handleLogin}

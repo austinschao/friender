@@ -1,13 +1,16 @@
 import React from "react";
+import { Socket } from "socket.io-client";
 import UserContext from "./userContext";
 
-function ChatRoom({ privateSocket }) {
+function ChatRoom({ privateSocket, socket }) {
   // create state using hooks
   const { currentUser, token } = React.useContext(UserContext);
-  const [messages, setMessages] = React.useState("");
+  const [messages, setMessages] = React.useState([]);
   // const [message, setMessage] = React.useState("");
   const [privateMessage, setPrivateMessage] = React.useState("");
   const [sendToUser, setSendToUser] = React.useState("");
+  const [currRoom, setCurrRoom] = React.useState("");
+  const [rooms, setRooms] = React.useState([]);
 
 
   // component update method as hook (useEffect)
@@ -46,9 +49,9 @@ function ChatRoom({ privateSocket }) {
     setMessages([...messages, msg]);
   });
 
-  // socket.on("message", msg => {
-  //   setMessages([...messages, msg]);
-  // });
+  socket.on("message", msg => {
+    setMessages([...messages, msg]);
+  });
 
   // socket.on("message", msg => {
   //   console.log("it went here after???");
@@ -66,6 +69,11 @@ function ChatRoom({ privateSocket }) {
   //   });
   // }
 
+  function handleMessage(evt) {
+    const [message] = evt.target.value;
+    socket.send({ message: message, username: currentUser.username, room: currRoom });
+  }
+
   function handlePrivateMsgChange(evt) {
     setPrivateMessage(evt.target.value);
   }
@@ -76,13 +84,37 @@ function ChatRoom({ privateSocket }) {
 
   function handlePrivateMessage() {
     if (privateMessage !== "" && sendToUser !== "") {
-      privateSocket.emit('private_message', { username: sendToUser, message: privateMessage });
-      console.log(sendToUser, privateMessage);
+      privateSocket.emit('private_message', { sender: currentUser.username, receiver: sendToUser, message: privateMessage });
+      setMessages([...messages, `${currentUser.username}: ${privateMessage}`]);
       setPrivateMessage("");
       setSendToUser("");
     } else {
       alert("Please list the receiver's username or add a message");
     }
+  }
+
+  function printSysMsg(message) {
+
+  }
+
+  function handleJoin(evt) {
+    const [room] = evt.target.value;
+    if (room === currRoom) {
+      let message = `You are already in ${room} room.`;
+      printSysMsg(message);
+    } else {
+      leaveRoom(currRoom);
+      joinRoom(room);
+    }
+  }
+
+  function joinRoom(room) {
+    setCurrRoom(room);
+    Socket.emit('join', { username: currentUser.username, room: room });
+  }
+
+  function leaveRoom(room) {
+    Socket.emit('leave', { username: currentUser.username, room: currRoom });
   }
 
 
