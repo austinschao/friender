@@ -33,10 +33,10 @@ function UserCard({ user, handleMatch, handleReject }) {
               <li className="card-text"><b>Interests</b>: {user.interests.replace(/[\[\]']+/g, '')}</li>
               <li className="card-text"><b>Hobbies</b>: {user.hobbies.replace(/[\[\]']+/g, '')}</li>
             </ul>
-            <div className="d-flex justify-content-center">
+            {currentUser.matched.find(matched => matched.username !== user.username) && <div className="d-flex justify-content-center">
               <button className="btn btn-success btn-sm mx-1" onClick={() => handleMatch(currentUser, user)}>Match</button>
               <button className="btn btn-danger btn-sm mx-1" onClick={() => handleReject(currentUser, user)}>Reject</button>
-            </div>
+            </div>}
           </div>
         </div>
       </div >
