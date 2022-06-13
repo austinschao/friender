@@ -55,7 +55,7 @@ function ChatRoom({ privateSocket, socket }) {
 
   privateSocket.on('room_name', rooms => {
     console.log(rooms);
-    setRoomNames([...roomNames, ...rooms]);
+    setRoomNames(prevRoom => [...prevRoom, ...rooms]);
   });
 
   // socket.on("message", msg => {
@@ -90,7 +90,7 @@ function ChatRoom({ privateSocket, socket }) {
   function handlePrivateMessage() {
     if (privateMessage !== "" && sendToUser !== "") {
       privateSocket.emit('private_message', { sender: currentUser.username, receiver: sendToUser, message: privateMessage });
-      setMessages([...messages, `${currentUser.username}: ${privateMessage}`]);
+      setMessages(prevMessages => [...prevMessages, `${currentUser.username}: ${privateMessage}`]);
       setPrivateMessage("");
       setSendToUser("");
     } else {
@@ -99,12 +99,12 @@ function ChatRoom({ privateSocket, socket }) {
   }
 
   function printSysMsg(message) {
-    setMessages([...messages, message]);
+    setMessages(prevMessages => [...prevMessages, message]);
   }
 
   function handleJoin(evt) {
-    const [room] = evt.target.value;
-    console.log(evt);
+    console.log(evt, "EVT");
+    const [room] = evt.target.innerText;
     if (room === currRoom) {
       let message = `You are already in ${room} room.`;
       printSysMsg(message);
@@ -116,11 +116,11 @@ function ChatRoom({ privateSocket, socket }) {
 
   function joinRoom(room) {
     setCurrRoom(room);
-    Socket.emit('join', { username: currentUser.username, room: room });
+    socket.emit('join', { username: currentUser.username, room: room });
   }
 
   function leaveRoom(room) {
-    Socket.emit('leave', { username: currentUser.username, room: currRoom });
+    socket.emit('leave', { username: currentUser.username, room: currRoom });
   }
 
 
@@ -128,14 +128,12 @@ function ChatRoom({ privateSocket, socket }) {
     <div>
       <h1>Welcome to the chat!</h1>
       {/* Display Room Selection */}
-      {/* <div>
+      <navbar>
         <h4>Rooms</h4>
-        <ul>
-          {roomNames.length > 0 && roomNames.map((room, i) => (
-            <li key={i} onClick={evt => handleJoin(evt)}>{room}</li>
-          ))}
-        </ul>
-      </div> */}
+        {roomNames.length > 0 && roomNames.map((room, i) => (
+          <nav key={i} onClick={evt => handleJoin(evt)}>{room}</nav>
+        ))}
+      </navbar>
       {messages.length > 0 &&
         messages.map((msg, i) => (
           <div key={i}>
