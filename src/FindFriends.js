@@ -4,7 +4,7 @@ import userContext from "./userContext";
 import { useContext } from "react";
 import FrienderAPI from "./api/api";
 import { debounce, randomChoice } from "./utils/utils";
-import ChatRoom from "./ChatRoom";
+import ChatRoom from "./ChatRooms";
 
 
 /** Manages list of potential friends you can match with

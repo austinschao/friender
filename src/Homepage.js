@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import UserContext from "./userContext";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function Homepage() {
   const { currentUser } = useContext(UserContext);
@@ -20,14 +20,14 @@ function Homepage() {
         ) : (
           <>
             <button className="btn btn-outline-secondary mx-1">
-              <Link to={`/login`} style={{ textDecoration: "none" }}>
+              <NavLink to={`/login`} style={{ textDecoration: "none" }}>
                 Login
-              </Link>
+              </NavLink>
             </button>
             <button className="btn btn-outline-primary mx-1">
-              <Link to={`/signup`} style={{ textDecoration: "none" }}>
+              <NavLink to={`/signup`} style={{ textDecoration: "none" }}>
                 Signup
-              </Link>
+              </NavLink>
             </button>
           </>
         )}

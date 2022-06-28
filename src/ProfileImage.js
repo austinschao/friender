@@ -8,7 +8,7 @@ function ProfileImage() {
 
     <div className="card">
       <div>
-        <img className="img-thumbnail col-md-4" src={currentUser.image_url} />
+        <img className="img-thumbnail col-md-4" src={currentUser.image_url} alt="user profile" />
       </div>
     </div>
   );

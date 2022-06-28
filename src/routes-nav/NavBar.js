@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import UserContext from "../userContext";
 import { useContext } from "react";
 
@@ -8,14 +8,14 @@ function NavBar({ handleLogout }) {
   const loggedOut = (
     <ul className="navbar-nav ms-auto">
       <li className="nav-item">
-        <Link to={"/login"} className="nav-link" href="#">
+        <NavLink to={"/login"} className="nav-link" href="#">
           Login
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link to={"/signup"} className="nav-link" href="#">
+        <NavLink to={"/signup"} className="nav-link" href="#">
           Sign Up
-        </Link>
+        </NavLink>
       </li>
     </ul>
   );
@@ -23,29 +23,29 @@ function NavBar({ handleLogout }) {
   const loggedIn = (
     <ul className="navbar-nav ms-auto">
       <li className="nav-item">
-        <Link to={"/users/:username"} className="nav-link" href="#">
+        <NavLink to={`/${currentUser?.username}}/profile`} className="nav-link" href="#">
           Profile
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link to={"/users/:username/friends"} className="nav-link" href="#">
+        <NavLink to={`/${currentUser?.username}/friends`} className="nav-link" href="#">
           Friends
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link to={"/users/:username/findfriends"} className="nav-link" href="#">
+        <NavLink to={`/${currentUser?.username}/findfriends`} className="nav-link" href="#">
           Find a Friend
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link to={"/users/:username/chat"} className="nav-link" href="#">
+        <NavLink to={`/${currentUser?.username}/chat`} className="nav-link" href="#">
           Chat
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link to={"/"} onClick={handleLogout} className="nav-link" href="#">
+        <NavLink to={"/"} onClick={handleLogout} className="nav-link" href="#">
           Logout
-        </Link>
+        </NavLink>
       </li>
     </ul>
   );
@@ -53,9 +53,9 @@ function NavBar({ handleLogout }) {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
-        <Link to={`/`} className="navbar-brand" href="#">
+        <NavLink to={`/`} className="navbar-brand" href="#">
           Friender
-        </Link>
+        </NavLink>
         <button
           className="navbar-toggler"
           type="button"

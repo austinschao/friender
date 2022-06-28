@@ -7,7 +7,7 @@ import FriendsList from "../FriendsList";
 import FindFriends from "../FindFriends";
 import { useContext } from "react";
 import UserContext from "../userContext";
-import ChatRoom from "../ChatRoom";
+import ChatRooms from "../ChatRooms";
 
 function RoutesList({ handleLogin, handleSignup, socket, privateSocket }) {
   const { currentUser } = useContext(UserContext);
@@ -32,10 +32,10 @@ function RoutesList({ handleLogin, handleSignup, socket, privateSocket }) {
 
         {currentUser && (
           <>
-            <Route path="/users/:username" element={<UserProfile />} />
-            <Route path="/users/:username/friends" element={<FriendsList currentUser={currentUser} />} />
-            <Route path="/users/:username/findfriends" element={<FindFriends currentUser={currentUser} />} />
-            <Route path="/users/:username/chat" element={<ChatRoom currentUser={currentUser} socket={socket} privateSocket={privateSocket} />} />
+            <Route path="/:username/profile" element={<UserProfile />} />
+            <Route path="/:username/friends" element={<FriendsList currentUser={currentUser} />} />
+            <Route path="/:username/findfriends" element={<FindFriends currentUser={currentUser} />} />
+            <Route path="/:username/chat" element={<ChatRooms currentUser={currentUser} socket={socket} privateSocket={privateSocket} />} />
           </>
         )}
 

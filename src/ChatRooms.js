@@ -1,12 +1,9 @@
 import React from "react";
-import { Socket } from "socket.io-client";
 import UserContext from "./userContext";
 
-function ChatRoom({ privateSocket, socket }) {
-  // create state using hooks
+function ChatRooms({ privateSocket, socket }) {
   const { currentUser, token } = React.useContext(UserContext);
   const [messages, setMessages] = React.useState([]);
-  // const [message, setMessage] = React.useState("");
   const [privateMessage, setPrivateMessage] = React.useState("");
   const [sendToUser, setSendToUser] = React.useState("");
   const [currRoom, setCurrRoom] = React.useState("");
@@ -29,64 +26,51 @@ function ChatRoom({ privateSocket, socket }) {
   // );
 
   React.useEffect(() => {
+    function sendUsername() {
+      privateSocket.emit('username', { username: currentUser.username, token: token });
+    }
     sendUsername();
   }, []);
 
-
-  // Connect user to chat
-  // socket.on('connect', () => {
-  //   console.log("it connected");
-  //   privateSocket.emit('username', { username: currentUser.username, token: token });
-  //   socket.send({ username: currentUser.username, message: `${currentUser.username} has connected.` });
-  // });
-
-  function sendUsername() {
-    privateSocket.emit('username', { username: currentUser.username, token: token });
-  }
-
+  /** Event listener for new_private_message from privateSocket. Adds new messages to previous messages
+   */
   privateSocket.on('new_private_message', msg => {
     console.log(msg);
     setMessages([...messages, msg]);
   });
 
-  socket.on("message", msg => {
-    setMessages([...messages, msg]);
-  });
+  /** Event listener for message. Sets the message to the incoming message
+   * currently not being used
+  */
+  // socket.on("message", msg => {
+  //   setMessages([...messages, msg]);
+  // });
 
+  /** Event listener for room_name from privateSocket. Sets incoming room names to previous room names */
   privateSocket.on('room_name', rooms => {
     console.log(rooms);
     setRoomNames(prevRoom => [...prevRoom, ...rooms]);
   });
 
-  // socket.on("message", msg => {
-  //   console.log("it went here after???");
-  //   setMessages([...messages, msg]);
-  // });
-
-  // This method will call when first time app render and
-  // Everytime message length changes
-  // Each time a new message is created, it will add to the list of messages
-
-  // function getMessages() {
-  //   // If console.log is in here, it would console 9 times each time message is added
-  //   socket.on("message", msg => {
-  //     setMessages([...messages, msg]);
-  //   });
-  // }
-
+  /** Sends message to the private room */
   function handleMessage(evt) {
     const [message] = evt.target.value;
     socket.send({ message: message, username: currentUser.username, room: currRoom });
   }
 
+  /** Gathers message to be sent to other user */
   function handlePrivateMsgChange(evt) {
     setPrivateMessage(evt.target.value);
   }
 
+  /** Gathers username for whom to send message to */
   function handleSendToUser(evt) {
     setSendToUser(evt.target.value);
   }
 
+  /** Sends the message to other user
+   *  If no username/message is provided, alerts a message
+   */
   function handlePrivateMessage() {
     if (privateMessage !== "" && sendToUser !== "") {
       privateSocket.emit('private_message', { sender: currentUser.username, receiver: sendToUser, message: privateMessage });
@@ -98,10 +82,12 @@ function ChatRoom({ privateSocket, socket }) {
     }
   }
 
+  /** Adds to message history that you have joined a room */
   function printSysMsg(message) {
     setMessages(prevMessages => [...prevMessages, message]);
   }
 
+  /** Allows a user to join another room */
   function handleJoin(evt) {
     console.log(evt, "EVT");
     const [room] = evt.target.innerText;
@@ -114,12 +100,15 @@ function ChatRoom({ privateSocket, socket }) {
     }
   }
 
+  /** Sets currRoom to room that is clicked. Sends message to backend notifying of the join */
   function joinRoom(room) {
     setCurrRoom(room);
     socket.emit('join', { username: currentUser.username, room: room });
   }
 
+  /** Sets currRoom to "". Sends message to backend notifying of the leave */
   function leaveRoom(room) {
+    setCurrRoom("");
     socket.emit('leave', { username: currentUser.username, room: currRoom });
   }
 
@@ -128,12 +117,10 @@ function ChatRoom({ privateSocket, socket }) {
     <div>
       <h1>Welcome to the chat!</h1>
       {/* Display Room Selection */}
-      <navbar>
-        <h4>Rooms</h4>
-        {roomNames.length > 0 && roomNames.map((room, i) => (
-          <nav key={i} onClick={evt => handleJoin(evt)}>{room}</nav>
-        ))}
-      </navbar>
+      <h4>Rooms</h4>
+      {roomNames.length > 0 && roomNames.map((room, i) => (
+        <nav key={i} onClick={evt => handleJoin(evt)}>{room}</nav>
+      ))}
       {messages.length > 0 &&
         messages.map((msg, i) => (
           <div key={i}>
@@ -161,4 +148,4 @@ function ChatRoom({ privateSocket, socket }) {
   );
 }
 
-export default ChatRoom;
+export default ChatRooms;
