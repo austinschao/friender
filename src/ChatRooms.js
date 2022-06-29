@@ -1,4 +1,5 @@
 import React from "react";
+import ChatRoomDropDown from "./routes-nav/ChatRoomDropDown";
 import UserContext from "./userContext";
 
 function ChatRooms({ privateSocket, socket }) {
@@ -47,9 +48,8 @@ function ChatRooms({ privateSocket, socket }) {
   // });
 
   /** Event listener for room_name from privateSocket. Sets incoming room names to previous room names */
-  privateSocket.on('room_name', rooms => {
-    console.log(rooms);
-    setRoomNames(prevRoom => [...prevRoom, ...rooms]);
+  privateSocket.on('room_name', data => {
+    setRoomNames(prevRoom => [...prevRoom, ...data.rooms]);
   });
 
   /** Sends message to the private room */
@@ -117,10 +117,9 @@ function ChatRooms({ privateSocket, socket }) {
     <div>
       <h1>Welcome to the chat!</h1>
       {/* Display Room Selection */}
-      <h4>Rooms</h4>
-      {roomNames.length > 0 && roomNames.map((room, i) => (
-        <nav key={i} onClick={evt => handleJoin(evt)}>{room}</nav>
-      ))}
+      <ChatRoomDropDown roomNames={roomNames} />
+      {!currRoom && <h4>Connect with your friend!</h4>}
+
       {messages.length > 0 &&
         messages.map((msg, i) => (
           <div key={i}>
