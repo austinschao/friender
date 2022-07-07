@@ -5,6 +5,7 @@ import UserContext from "./userContext";
 function ChatRooms({ privateSocket, socket }) {
   const { currentUser, token } = React.useContext(UserContext);
   const [messages, setMessages] = React.useState([]);
+  const [message, setMessage] = React.useState("");
   const [privateMessage, setPrivateMessage] = React.useState("");
   const [sendToUser, setSendToUser] = React.useState("");
   const [currRoom, setCurrRoom] = React.useState("");
@@ -28,14 +29,14 @@ function ChatRooms({ privateSocket, socket }) {
 
   React.useEffect(() => {
     function sendUsername() {
-      privateSocket.emit('username', { username: currentUser.username, token: token });
+      socket.emit('username', { username: currentUser.username, token: token });
     }
     sendUsername();
   }, []);
 
   /** Event listener for new_private_message from privateSocket. Adds new messages to previous messages
    */
-  privateSocket.on('new_private_message', msg => {
+  socket.on('new_message', msg => {
     console.log(msg);
     setMessages([...messages, msg]);
   });
@@ -48,15 +49,29 @@ function ChatRooms({ privateSocket, socket }) {
   // });
 
   /** Event listener for room_name from privateSocket. Sets incoming room names to previous room names */
-  privateSocket.on('room_name', data => {
+  socket.on('room_name', data => {
     setRoomNames(prevRoom => [...prevRoom, ...data.rooms]);
   });
 
   /** Sends message to the private room */
   function handleMessage(evt) {
-    const [message] = evt.target.value;
-    socket.send({ message: message, username: currentUser.username, room: currRoom });
+    if (message) {
+      alert("Please add a message");
+    }
+    const [msg] = evt.target.value;
+    socket.send({ message: msg, username: currentUser.username, room: currRoom });
+    setMessage("");
   }
+
+  /** Gathers message to be to sent to other user */
+  function handleMessageChange(evt) {
+    setMessage(evt.target.value);
+  }
+
+  /** Gather message history between users */
+  // function loadMessageHistory() {
+
+  // }
 
   /** Gathers message to be sent to other user */
   function handlePrivateMsgChange(evt) {
@@ -117,15 +132,22 @@ function ChatRooms({ privateSocket, socket }) {
     <div>
       <h1>Welcome to the chat!</h1>
       {/* Display Room Selection */}
-      <ChatRoomDropDown roomNames={roomNames} />
+      <ChatRoomDropDown
+        roomNames={roomNames}
+        handleMessage={handleMessage}
+        handleMessageChange={handleMessageChange}
+        messages={messages}
+        setMessages={setMessages}
+      />
       {!currRoom && <h4>Connect with your friend!</h4>}
 
-      {messages.length > 0 &&
+      {/* {messages.length > 0 &&
         messages.map((msg, i) => (
           <div key={i}>
             <p>{msg}</p>
           </div>
-        ))}
+        ))} */}
+
       <div>
         {/* Private Message */}
         <div>
