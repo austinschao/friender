@@ -6,16 +6,8 @@ import FrienderAPI from "./api/api";
 import jwtDecode from "jwt-decode";
 import NavBar from "./routes-nav/NavBar";
 import RoutesList from "./routes-nav/RoutesList";
-import io from "socket.io-client";
 
 
-const TOKEN_NAME = "token";
-
-// connect with server using socket io
-const socket = io.connect("http://localhost:3001");
-
-//name space for private messages
-const privateSocket = io(`http://localhost:3001/private`);
 
 /** Manages Friender Application
  *

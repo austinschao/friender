@@ -1,6 +1,8 @@
 import React from "react";
 import ChatRoomDropDown from "./routes-nav/ChatRoomDropDown";
 import UserContext from "./userContext";
+import io from "socket.io-client";
+
 
 function ChatRooms({ privateSocket, socket }) {
   const { currentUser, token } = React.useContext(UserContext);
@@ -10,6 +12,12 @@ function ChatRooms({ privateSocket, socket }) {
   const [sendToUser, setSendToUser] = React.useState("");
   const [currRoom, setCurrRoom] = React.useState("");
   const [roomNames, setRoomNames] = React.useState([]);
+  const [socket, setSocket] = useState(null);
+
+
+
+  // connect with server using socket io
+  // const socket = io.connect("http://localhost:3001");
 
 
   // component update method as hook (useEffect)
@@ -27,31 +35,40 @@ function ChatRooms({ privateSocket, socket }) {
   //   }[messages.length]
   // );
 
+  // React.useEffect(() => {
+  //   function sendUsername() {
+  //     socket.emit('username', { username: currentUser.username, token: token });
+  //   }
+  //   sendUsername();
+  // }, []);
+
   React.useEffect(() => {
-    function sendUsername() {
+    if (socket === null) {
+      setSocket(io.connect("http://localhost:3001"));
       socket.emit('username', { username: currentUser.username, token: token });
+    } else {
+      /** Event listener for new_private_message from privateSocket. Adds new messages to previous messages
+       */
+      socket.on('new_message', msg => {
+        console.log(msg);
+        setMessages([...messages, msg]);
+      });
+
+      /** Event listener for message. Sets the message to the incoming message
+       * currently not being used
+      */
+      // socket.on("message", msg => {
+      //   setMessages([...messages, msg]);
+      // });
+
+      /** Event listener for room_name from privateSocket. Sets incoming room names to previous room names */
+      socket.on('room_name', data => {
+        setRoomNames(prevRoom => [...prevRoom, ...data.rooms]);
+      });
     }
-    sendUsername();
-  }, []);
-
-  /** Event listener for new_private_message from privateSocket. Adds new messages to previous messages
-   */
-  socket.on('new_message', msg => {
-    console.log(msg);
-    setMessages([...messages, msg]);
   });
 
-  /** Event listener for message. Sets the message to the incoming message
-   * currently not being used
-  */
-  // socket.on("message", msg => {
-  //   setMessages([...messages, msg]);
-  // });
 
-  /** Event listener for room_name from privateSocket. Sets incoming room names to previous room names */
-  socket.on('room_name', data => {
-    setRoomNames(prevRoom => [...prevRoom, ...data.rooms]);
-  });
 
   /** Sends message to the private room */
   function handleMessage(evt) {
