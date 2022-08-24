@@ -6,7 +6,7 @@ import FrienderAPI from "./api/api";
 import jwtDecode from "jwt-decode";
 import NavBar from "./routes-nav/NavBar";
 import RoutesList from "./routes-nav/RoutesList";
-
+const TOKEN_NAME = "token";
 
 
 /** Manages Friender Application
@@ -135,8 +135,6 @@ function FrienderApp() {
             handleLogout={handleLogout}
           />
           <RoutesList
-            socket={socket}
-            privateSocket={privateSocket}
             handleSignup={handleSignup}
             handleLogin={handleLogin}
             handleMatch={handleMatch}

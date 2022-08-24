@@ -4,15 +4,14 @@ import UserContext from "./userContext";
 import io from "socket.io-client";
 
 
-function ChatRooms({ privateSocket, socket }) {
+function ChatRooms() {
   const { currentUser, token } = React.useContext(UserContext);
   const [messages, setMessages] = React.useState([]);
   const [message, setMessage] = React.useState("");
-  const [privateMessage, setPrivateMessage] = React.useState("");
   const [sendToUser, setSendToUser] = React.useState("");
   const [currRoom, setCurrRoom] = React.useState("");
   const [roomNames, setRoomNames] = React.useState([]);
-  const [socket, setSocket] = useState(null);
+  const [socket, setSocket] = React.useState(null);
 
 
 
@@ -90,11 +89,6 @@ function ChatRooms({ privateSocket, socket }) {
 
   // }
 
-  /** Gathers message to be sent to other user */
-  function handlePrivateMsgChange(evt) {
-    setPrivateMessage(evt.target.value);
-  }
-
   /** Gathers username for whom to send message to */
   function handleSendToUser(evt) {
     setSendToUser(evt.target.value);
@@ -103,16 +97,16 @@ function ChatRooms({ privateSocket, socket }) {
   /** Sends the message to other user
    *  If no username/message is provided, alerts a message
    */
-  function handlePrivateMessage() {
-    if (privateMessage !== "" && sendToUser !== "") {
-      privateSocket.emit('private_message', { sender: currentUser.username, receiver: sendToUser, message: privateMessage });
-      setMessages(prevMessages => [...prevMessages, `${currentUser.username}: ${privateMessage}`]);
-      setPrivateMessage("");
-      setSendToUser("");
-    } else {
-      alert("Please list the receiver's username or add a message");
-    }
-  }
+  // function handlePrivateMessage() {
+  //   if (privateMessage !== "" && sendToUser !== "") {
+  //     privateSocket.emit('private_message', { sender: currentUser.username, receiver: sendToUser, message: privateMessage });
+  //     setMessages(prevMessages => [...prevMessages, `${currentUser.username}: ${privateMessage}`]);
+  //     setPrivateMessage("");
+  //     setSendToUser("");
+  //   } else {
+  //     alert("Please list the receiver's username or add a message");
+  //   }
+  // }
 
   /** Adds to message history that you have joined a room */
   function printSysMsg(message) {
@@ -158,12 +152,12 @@ function ChatRooms({ privateSocket, socket }) {
       />
       {!currRoom && <h4>Connect with your friend!</h4>}
 
-      {/* {messages.length > 0 &&
+      {messages.length > 0 &&
         messages.map((msg, i) => (
           <div key={i}>
             <p>{msg}</p>
           </div>
-        ))} */}
+        ))}
 
       <div>
         {/* Private Message */}
@@ -171,15 +165,15 @@ function ChatRooms({ privateSocket, socket }) {
           <label htmlFor="send-to">Send To:
             <input type="text" name="sendToUser"
               value={sendToUser}
-              onChange={evt => handleSendToUser(evt)} />
+              onChange={handleSendToUser} />
           </label>
           <label htmlFor="private-msg">
             <input type="text" id="private-msg" name="privateMessage"
-              value={privateMessage}
-              onChange={evt => handlePrivateMsgChange(evt)} />
+              value={message}
+              onChange={handleMessageChange} />
           </label>
           <button id="send_private_message"
-            onClick={handlePrivateMessage}>Send</button>
+            onClick={handleMessage}>Send</button>
         </div>
       </div>
     </div >
